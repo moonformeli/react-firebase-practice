@@ -1,3 +1,4 @@
+import { FirebaseApp } from 'firebase/app';
 import {
   getAuth,
   signInWithPopup,
@@ -5,7 +6,11 @@ import {
   GoogleAuthProvider,
 } from 'firebase/auth';
 
-export const useGoogleLogin = () => {
+export const useGoogleLogin = (app: FirebaseApp | null) => {
+  if (!app) {
+    return { signIn: () => undefined, signOut: () => undefined };
+  }
+
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
   console.log('앱 in useGoogleLogin', auth);

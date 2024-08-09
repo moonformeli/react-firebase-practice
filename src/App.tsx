@@ -1,29 +1,23 @@
 import React, { useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-import { useGoogleLogin } from './hooks';
+import Login from './components/Login';
+import { useFirebaseInit } from './hooks';
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
-  const { signIn } = useGoogleLogin();
-
-  const handleSignIn = async () => {
-    const credential = await signIn();
-
-    if (credential?.accessToken) {
-      setIsSignedIn(true);
-    }
-  };
+  const { app } = useFirebaseInit();
 
   return (
     <div className='App'>
       <div></div>
-      {isSignedIn ? (
-        <h1>로그인 완료</h1>
-      ) : (
-        <button onClick={handleSignIn}>구글 로그인</button>
-      )}
+      <Login
+        app={app}
+        isSignedIn={isSignedIn}
+        onLogin={() => {
+          setIsSignedIn(true);
+        }}
+      />
     </div>
   );
 }
