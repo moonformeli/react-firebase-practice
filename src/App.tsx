@@ -24,7 +24,7 @@ function App() {
           setIsSignedIn(true);
         }}
       />
-      <TodoList todos={todos} />
+      <TodoList db={db} todos={todos} />
     </div>
   );
 }
