@@ -1,24 +1,26 @@
-import React, { useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import React, { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
 import './App.css';
 
 import Login from './components/Login';
-import { useFirebaseInit, useSubscribe, useTodos } from './hooks';
 import { todoStates } from './states';
 import TodoList from './components/TodoList';
+import TodoService from './services/TodoService';
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
 
-  const { app, db } = useFirebaseInit();
+  const todoService = TodoService.getInstance();
 
-  // const todos = useTodos(db);
+  const { app, db } = todoService;
 
-  useSubscribe(db);
+  const [todos, setTodos] = useRecoilState(todoStates);
 
-  const todos = useRecoilValue(todoStates);
+  useEffect(() => {
+    const unsubscribe = todoService.subscribe(setTodos);
 
-  console.log('todos', todos);
+    return () => unsubscribe();
+  }, []);
 
   return (
     <div className='App'>

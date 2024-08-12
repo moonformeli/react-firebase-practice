@@ -1,6 +1,6 @@
 import { ChangeEventHandler, FormEventHandler, useState } from 'react';
-import { useAddTodo } from '../hooks';
 import { Firestore } from 'firebase/firestore';
+import TodoService from '../services/TodoService';
 
 interface AddTodoProps {
   db: Firestore | null;
@@ -8,7 +8,7 @@ interface AddTodoProps {
 
 export default function AddTodo({ db }: AddTodoProps) {
   const [todo, setTodo] = useState('');
-  const { addTodo } = useAddTodo(db);
+  const todoService = TodoService.getInstance();
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setTodo(e.target.value);
@@ -21,7 +21,7 @@ export default function AddTodo({ db }: AddTodoProps) {
       return;
     }
 
-    if (await addTodo(todo)) {
+    if (await todoService.addTodo(todo)) {
       alert('Success');
       setTodo('');
     } else {
