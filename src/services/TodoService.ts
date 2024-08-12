@@ -7,6 +7,13 @@ import {
   addDoc,
   onSnapshot,
 } from 'firebase/firestore';
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  listAll,
+  getDownloadURL,
+} from 'firebase/storage';
 import { Todo } from '../types';
 
 let todoService: TodoService | null;
@@ -115,5 +122,29 @@ export default class TodoService {
 
       onUpdate(todos);
     });
+  }
+
+  uploadFile(file: File) {
+    const storage = getStorage();
+    const storageRef = ref(storage, `todolist/${file.name}`);
+
+    return uploadBytes(storageRef, file);
+  }
+
+  getImages() {
+    const storage = getStorage();
+    const listRef = ref(storage, 'todolist');
+
+    return listAll(listRef)
+      .then((result) => {
+        console.log('result in listAll', result);
+        const promises = result.items.map(getDownloadURL);
+
+        return Promise.all(promises);
+      })
+      .catch(() => {
+        console.log('Can not retrieve items from listAll');
+        return [] as string[];
+      });
   }
 }

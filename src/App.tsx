@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import './App.css';
 
 import Login from './components/Login';
-import { todoStates } from './states';
+import { imageStates, todoStates } from './states';
 import TodoList from './components/TodoList';
 import TodoService from './services/TodoService';
+import AddImage from './components/AddImage';
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -14,6 +15,7 @@ function App() {
 
   const { app, db } = todoService;
 
+  const urls = useRecoilValue(imageStates);
   const [todos, setTodos] = useRecoilState(todoStates);
 
   useEffect(() => {
@@ -33,6 +35,16 @@ function App() {
         }}
       />
       <TodoList db={db} todos={todos} />
+      <AddImage />
+      {urls.length > 0 && (
+        <ul>
+          {urls.map((url, i) => (
+            <li key={i}>
+              <img src={url} alt='' className='w-[200px] h-[200px]' />
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
