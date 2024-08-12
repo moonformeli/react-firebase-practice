@@ -2,15 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import { RecoilRoot } from 'recoil';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  // <FirebaseProvider>
-  <App />
-  // </FirebaseProvider>
+  <RecoilRoot>
+    <App />
+  </RecoilRoot>
 );
 
 // If you want to start measuring performance in your app, pass a function

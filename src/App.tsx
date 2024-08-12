@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import './App.css';
 
 import Login from './components/Login';
 import { useFirebaseInit, useSubscribe, useTodos } from './hooks';
-
+import { todoStates } from './states';
 import TodoList from './components/TodoList';
 
 function App() {
@@ -11,8 +12,11 @@ function App() {
 
   const { app, db } = useFirebaseInit();
 
-  const todos = useTodos(db);
+  // const todos = useTodos(db);
+
   useSubscribe(db);
+
+  const todos = useRecoilValue(todoStates);
 
   console.log('todos', todos);
 
